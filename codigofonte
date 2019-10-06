@@ -1,0 +1,113 @@
+
+<?php
+  class Pessoa
+    {
+
+  public $nome;
+  public $datanasc;
+  public $altura;
+  public $peso;
+  public $cpf;
+
+  public function __construct($nome, $datanasc, $cpf, $altura, $peso);
+  {
+    $this->nome = $nome;
+    $this->datanasc = $datanasc;
+    $this->cpf = $cpf;
+    $this->altura = $altura;
+    $this->peso = $peso;
+    }
+
+    function  calculaImc($peso, $altura);
+    {
+ return $peso / ($altura * $altura);
+}
+
+$massa = calculaImc(90, 1.70);
+
+
+if ($massa <= 17) {
+$mensagem = "Muito abaixo do peso";
+}
+elseif(($massa > 17) and ($massa <=18.49)) {
+$mensagem = "Abaixo do peso";
+}
+elseif(($massa > 18.49) and ($massa <=24.99)) {
+$mensagem = "Peso Normal";
+}
+elseif(($massa > 24.99) and ($massa <=29.99)) {
+$mensagem = "Acima do Peso";
+}
+elseif(($massa > 29.99) and ($massa <=34.99)) {
+$mensagem = "Obesidade I";
+}
+elseif(($massa > 34.99) and ($massa <=39.99)) {
+$mensagem = "Obesidade II (severa)";
+}
+else {
+$mensagem = "Obesidade III (mórbida)";
+}
+
+echo "Sua Massa Corporal é: <b> $massa </b><br>";
+echo "Estado Atual: <b> $mensagem</b>";
+
+date_default_timezone_set('America/Sao_Paulo');
+
+    function  calcularIdade($datanasc){
+        $dn = new DateTime($datanasc);
+        $agora = new DateTime();
+
+        $idade = $agora->diff($dn);
+        return $idade->y;
+    }
+    echo '<h1>', idade('1996-05-03'), 'anos de idade!<h1/>';
+
+    function  validaCPF($cpf = null) {
+
+	// Verifica se um número foi informado
+	if(empty($cpf)) {
+		return false;
+	}
+
+	// Elimina possivel mascara
+	$cpf = preg_replace("/[^0-9]/", "", $cpf);
+	$cpf = str_pad($cpf, 11, '0', STR_PAD_LEFT);
+
+	// Verifica se o numero de digitos informados é igual a 11
+	if (strlen($cpf) != 11) {
+		return false;
+	}
+	// Verifica se nenhuma das sequências invalidas abaixo
+	// foi digitada. Caso afirmativo, retorna falso
+	else if ($cpf == '00000000000' ||
+		$cpf == '11111111111' ||
+		$cpf == '22222222222' ||
+		$cpf == '33333333333' ||
+		$cpf == '44444444444' ||
+		$cpf == '55555555555' ||
+		$cpf == '66666666666' ||
+		$cpf == '77777777777' ||
+		$cpf == '88888888888' ||
+		$cpf == '99999999999') {
+		return false;
+	 // Calcula os digitos verificadores para verificar se o
+	 // CPF é válido
+	 } else {
+
+		for ($t = 9; $t < 11; $t++) {
+
+			for ($d = 0, $c = 0; $c < $t; $c++) {
+				$d += $cpf{$c} * (($t + 1) - $c);
+			}
+			$d = ((10 * $d) % 11) % 10;
+			if ($cpf{$c} != $d) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+};
+
+
+?>
